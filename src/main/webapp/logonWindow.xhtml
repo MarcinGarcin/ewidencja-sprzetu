@@ -7,23 +7,23 @@
                 template="/template/masterTemplate.xhtml">
     <ui:define name="title">#{msgs.logon}</ui:define>
     <ui:define name="content">
-        <div class="card" style="max-width:420px;">
+        <h:panelGroup layout="block" styleClass="card" style="max-width:420px;" pt:data-auth="j_security_check">
             <h3>#{msgs.logon}</h3>
             <form method="post" action="#{facesContext.externalContext.encodeActionURL(request.contextPath.concat('/j_security_check'))}" class="form-stack">
                 <div>
-                    <h:outputLabel for="j_username" value="#{msgs.username}" styleClass="info-label" />
+                    <h:outputLabel for="j_username" value="#{msgs.username}" styleClass="info-label" pt:data-field="username" />
                     <br />
-                    <h:inputText id="j_username" pt:placeholder="#{msgs.username}" pt:required="required" styleClass="input-text" style="width:100%;" />
+                    <input id="j_username" type="text" name="j_username" placeholder="#{msgs.username}" required="required" class="input-text" style="width:100%;" />
                 </div>
                 <div>
-                    <h:outputLabel for="j_password" value="#{msgs.password}" styleClass="info-label" />
+                    <h:outputLabel for="j_password" value="#{msgs.password}" styleClass="info-label" pt:data-field="password" />
                     <br />
-                    <h:inputSecret id="j_password" pt:placeholder="#{msgs.password}" pt:required="required" styleClass="input-text" style="width:100%;" />
+                    <input id="j_password" type="password" name="j_password" placeholder="#{msgs.password}" required="required" class="input-text" style="width:100%;" />
                 </div>
                 <div>
                     <input type="submit" value="#{msgs.logon}" class="btn-primary" />
                 </div>
             </form>
-        </div>
+        </h:panelGroup>
     </ui:define>
 </ui:composition>

@@ -50,8 +50,10 @@
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>ITAssetManagerRealm</realm-name>
-        <form-login-page>/faces/logonWindow.xhtml</form-login-page>
-        <form-error-page>/faces/logonError.xhtml</form-error-page>
+        <form-login-config>
+            <form-login-page>/faces/logonWindow.xhtml</form-login-page>
+            <form-error-page>/faces/logonError.xhtml</form-error-page>
+        </form-login-config>
     </login-config>
     <security-role>
         <role-name>it_staff</role-name>

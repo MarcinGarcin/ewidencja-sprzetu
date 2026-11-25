@@ -1,0 +1,21 @@
+Autor: Marcin Gałązka
+Grupa: IO2
+Projekt: Ewidencja Sprzętu IT (ITAssetManager)
+
+Środowisko:
+- Java SDK: JDK 17 (/opt/jdk-17)
+- Serwer aplikacji: Apache TomEE Plume 8.0.12 (konfiguracja maven tomee-maven-plugin:8.0.12)
+- Baza danych: PostgreSQL 16 (docker-compose.yml, baza itassetdb, użytkownik itasset, hasło itasset_pass)
+- Sterownik JDBC: postgresql-42.7.5.jar (kopiowany przez tomee-maven-plugin do lib/)
+- Certyfikat SSL: src/main/tomee/conf/tomcatKeystore.keystore (alias: tomcat, hasło: haslo123)
+- Konfiguracja serwera: src/main/tomee/conf/server.xml (konektor HTTPS na porcie 8443 oraz zasób JNDI jdbc/authority)
+
+Uruchomienie:
+1. Uruchomienie bazy PostgreSQL (tabele users, user_roles, t_equipment):
+   docker compose up -d
+2. Budowanie pliku .war i uruchomienie serwera TomEE Plume 8.0.12:
+   JAVA_HOME=/opt/jdk-17 PATH=/opt/jdk-17/bin:$PATH mvn clean package tomee:run
+3. Adres aplikacji (HTTP 8080 automatycznie przekierowuje na HTTPS 8443):
+   https://localhost:8443/ITAssetManager/
+4. Dane logowania (rola it_staff):
+   admin / admin123

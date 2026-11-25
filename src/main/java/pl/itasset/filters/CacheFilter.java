@@ -1,6 +1,7 @@
 package pl.itasset.filters;
 
 import java.io.IOException;
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -10,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/*")
+@WebFilter(urlPatterns = "/*", dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD})
 public class CacheFilter implements Filter {
 
     @Override
