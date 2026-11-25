@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <div class="header-brand">
+        <h:outputText value="#{appConfigXML.systemName}" />
+    </div>
+    <div class="header-controls">
+        <h:panelGroup rendered="#{not empty request.remoteUser}" styleClass="header-user">
+            <h:outputText value="#{msgs.loggedUser}: #{request.remoteUser}" />
+        </h:panelGroup>
+        <h:form id="headerControlsForm" styleClass="form-inline" style="margin-top:0;">
+            <h:commandButton value="PL" action="#{sessionController.switchLocale('pl')}" styleClass="btn-lang" />
+            <h:commandButton value="EN" action="#{sessionController.switchLocale('en')}" styleClass="btn-lang" />
+            <h:commandButton value="#{msgs.logout}" action="#{sessionController.logout()}"
+                             rendered="#{not empty request.remoteUser}" styleClass="btn-danger" />
+        </h:form>
+    </div>
+</ui:composition>
