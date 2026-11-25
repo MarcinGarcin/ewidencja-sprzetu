@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/masterTemplate.xhtml">
+    <ui:define name="title">#{msgs.ticketsTitle}</ui:define>
+    <ui:define name="content">
+        <h2 class="page-title">#{msgs.ticketsTitle}</h2>
+        <div class="card">
+            <h:form id="ticketsForm">
+                <h:dataTable value="#{sessionController.ticketItems}" var="ticket"
+                             styleClass="data-table" rowClasses="oddRow,evenRow"
+                             captionClass="warningMessage" footerClass="errorMessage">
+                    <h:column>
+                        <f:facet name="header">#{msgs.colId}</f:facet>
+                        <h:outputText value="#{ticket.id}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            #{msgs.colTitle}
+                            <h:commandButton id="sortTitleAsc" value="&#8595;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('title', 'asc')}" render="@form" />
+                            </h:commandButton>
+                            <h:commandButton id="sortTitleDesc" value="&#8593;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('title', 'desc')}" render="@form" />
+                            </h:commandButton>
+                        </f:facet>
+                        <h:inputText value="#{ticket.title}" rendered="#{ticket.edited}" styleClass="input-text" />
+                        <h:outputText value="#{ticket.title}" rendered="#{not ticket.edited}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            #{msgs.colPriority}
+                            <h:commandButton id="sortPriorityAsc" value="&#8595;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('priority', 'asc')}" render="@form" />
+                            </h:commandButton>
+                            <h:commandButton id="sortPriorityDesc" value="&#8593;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('priority', 'desc')}" render="@form" />
+                            </h:commandButton>
+                        </f:facet>
+                        <h:inputText value="#{ticket.priority}" rendered="#{ticket.edited}" styleClass="input-text" />
+                        <h:outputText value="#{ticket.priority}" rendered="#{not ticket.edited}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            #{msgs.colAssignee}
+                            <h:commandButton id="sortAssigneeAsc" value="&#8595;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('assignee', 'asc')}" render="@form" />
+                            </h:commandButton>
+                            <h:commandButton id="sortAssigneeDesc" value="&#8593;" styleClass="btn-secondary">
+                                <f:ajax listener="#{sessionController.sortTickets('assignee', 'desc')}" render="@form" />
+                            </h:commandButton>
+                        </f:facet>
+                        <h:inputText value="#{ticket.assignee}" rendered="#{ticket.edited}" styleClass="input-text" />
+                        <h:outputText value="#{ticket.assignee}" rendered="#{not ticket.edited}" />
+                    </h:column>
+                    <h:column id="kolOperacja">
+                        <f:facet name="header">#{msgs.colOperation}</f:facet>
+                        <h:selectBooleanCheckbox id="editCheckBox" value="#{ticket.edited}" rendered="true">
+                            <f:ajax listener="#{sessionController.toggleTicketEdit(ticket)}" execute="@form" render="@form" />
+                        </h:selectBooleanCheckbox>
+                        <h:commandButton id="addRow" value="+" styleClass="btn-primary">
+                            <f:ajax listener="#{sessionController.addTicketRow()}" execute="@form" render="@form" />
+                        </h:commandButton>
+                        <h:commandButton id="deleteRow" value="-" styleClass="btn-danger">
+                            <f:ajax listener="#{sessionController.deleteTicketRow(ticket)}" execute="@form" render="@form" />
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+                <div class="action-bar">
+                    <h:commandButton value="#{msgs.btnAddNew}" styleClass="btn-primary">
+                        <f:ajax listener="#{sessionController.addTicketRow()}" execute="@form" render="@form" />
+                    </h:commandButton>
+                    <h:commandButton value="#{msgs.btnRefresh}" styleClass="btn-secondary">
+                        <f:ajax listener="#{sessionController.refreshTickets()}" render="@form" />
+                    </h:commandButton>
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>

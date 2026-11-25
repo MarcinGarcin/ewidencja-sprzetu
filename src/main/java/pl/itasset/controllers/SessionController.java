@@ -2,6 +2,8 @@ package pl.itasset.controllers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
@@ -12,6 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import pl.itasset.data.ChecklistItem;
 import pl.itasset.data.MenuItem;
+import pl.itasset.data.TicketItem;
 
 @Named("sessionController")
 @SessionScoped
@@ -30,6 +33,8 @@ public class SessionController implements Serializable {
     private List<ChecklistItem> checklistItems = new ArrayList<>();
     private List<ChecklistItem> savedChecklistSnapshot = new ArrayList<>();
     private long nextChecklistId = 4L;
+    private List<TicketItem> ticketItems = new ArrayList<>();
+    private long nextTicketId = 5L;
 
     public SessionController() {
     }
@@ -49,6 +54,17 @@ public class SessionController implements Serializable {
         checklistItems.add(new ChecklistItem(2L, "Serwer HPE ProLiant DL380", "Weryfikacja kopii zapasowej RAID", "W trakcie", false));
         checklistItems.add(new ChecklistItem(3L, "Switch Cisco Catalyst 9200", "Aktualizacja firmware i kopia konfiguracji", "Oczekuje", false));
         snapshotChecklist();
+
+        initDefaultTickets();
+    }
+
+    private void initDefaultTickets() {
+        ticketItems = new ArrayList<>();
+        ticketItems.add(new TicketItem(1L, "Brak dostępu do VPN", "Wysoki", "Kowalski", false));
+        ticketItems.add(new TicketItem(2L, "Wymiana baterii UPS w serwerowni", "Krytyczny", "Nowak", false));
+        ticketItems.add(new TicketItem(3L, "Konfiguracja konta pocztowego", "Niski", "Zieliński", false));
+        ticketItems.add(new TicketItem(4L, "Aktualizacja certyfikatu SSL", "Średni", "Adamski", false));
+        nextTicketId = 5L;
     }
 
     private void snapshotChecklist() {
@@ -92,6 +108,49 @@ public class SessionController implements Serializable {
         for (ChecklistItem item : savedChecklistSnapshot) {
             checklistItems.add(new ChecklistItem(item));
         }
+    }
+
+    public void toggleTicketEdit(TicketItem item) {
+        int index = ticketItems.indexOf(item);
+        if (index >= 0) {
+            ticketItems.set(index, item);
+        }
+    }
+
+    public void addTicketRow() {
+        ticketItems.add(new TicketItem(nextTicketId++, "Nowe zgłoszenie", "Średni", "Admin", true));
+    }
+
+    public void deleteTicketRow(TicketItem item) {
+        ticketItems.remove(item);
+    }
+
+    public void refreshTickets() {
+        initDefaultTickets();
+    }
+
+    public void sortTickets(String field, String dir) {
+        Comparator<TicketItem> comparator = (TicketItem a, TicketItem b) -> {
+            String valA = extractTicketField(a, field);
+            String valB = extractTicketField(b, field);
+            if ("asc".equals(dir)) {
+                return valA.compareToIgnoreCase(valB);
+            }
+            return valB.compareToIgnoreCase(valA);
+        };
+        Collections.sort(ticketItems, comparator);
+    }
+
+    private String extractTicketField(TicketItem item, String field) {
+        String value;
+        if ("priority".equals(field)) {
+            value = item.getPriority();
+        } else if ("assignee".equals(field)) {
+            value = item.getAssignee();
+        } else {
+            value = item.getTitle();
+        }
+        return value != null ? value : "";
     }
 
     public String getDataFromReferenceComponent() {
@@ -192,5 +251,13 @@ public class SessionController implements Serializable {
 
     public void setChecklistItems(List<ChecklistItem> checklistItems) {
         this.checklistItems = checklistItems;
+    }
+
+    public List<TicketItem> getTicketItems() {
+        return ticketItems;
+    }
+
+    public void setTicketItems(List<TicketItem> ticketItems) {
+        this.ticketItems = ticketItems;
     }
 }
