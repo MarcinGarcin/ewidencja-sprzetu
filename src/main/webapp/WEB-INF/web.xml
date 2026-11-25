@@ -22,4 +22,24 @@
     <welcome-file-list>
         <welcome-file>faces/views/mainWindow.xhtml</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <display-name>IT Staff Views</display-name>
+        <web-resource-collection>
+            <web-resource-name>Protected Views</web-resource-name>
+            <url-pattern>/views/*</url-pattern>
+            <url-pattern>/faces/views/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>it_staff</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>ITAssetManagerRealm</realm-name>
+        <form-login-page>/faces/logonWindow.xhtml</form-login-page>
+        <form-error-page>/faces/logonError.xhtml</form-error-page>
+    </login-config>
+    <security-role>
+        <role-name>it_staff</role-name>
+    </security-role>
 </web-app>
