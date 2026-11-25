@@ -10,6 +10,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import pl.itasset.data.ChecklistItem;
 import pl.itasset.data.MenuItem;
 
 @Named("sessionController")
@@ -26,6 +27,9 @@ public class SessionController implements Serializable {
     private boolean advancedMode = false;
     private String dynamicTarget = "info";
     private List<MenuItem> menuItems = new ArrayList<>();
+    private List<ChecklistItem> checklistItems = new ArrayList<>();
+    private List<ChecklistItem> savedChecklistSnapshot = new ArrayList<>();
+    private long nextChecklistId = 4L;
 
     public SessionController() {
     }
@@ -39,6 +43,55 @@ public class SessionController implements Serializable {
         menuItems.add(new MenuItem("menuChecklist", "/views/checklistTable"));
         menuItems.add(new MenuItem("menuTickets", "/views/ticketsAjaxTable"));
         menuItems.add(new MenuItem("menuEquipment", "/views/equipmentDbTable"));
+
+        checklistItems = new ArrayList<>();
+        checklistItems.add(new ChecklistItem(1L, "Laptop Dell Latitude 5540", "Szyfrowanie dysku BitLocker", "OK", false));
+        checklistItems.add(new ChecklistItem(2L, "Serwer HPE ProLiant DL380", "Weryfikacja kopii zapasowej RAID", "W trakcie", false));
+        checklistItems.add(new ChecklistItem(3L, "Switch Cisco Catalyst 9200", "Aktualizacja firmware i kopia konfiguracji", "Oczekuje", false));
+        snapshotChecklist();
+    }
+
+    private void snapshotChecklist() {
+        savedChecklistSnapshot = new ArrayList<>();
+        for (ChecklistItem item : checklistItems) {
+            savedChecklistSnapshot.add(new ChecklistItem(item));
+        }
+    }
+
+    public void addChecklistRow(ChecklistItem row) {
+        int index = checklistItems.indexOf(row);
+        ChecklistItem newItem = new ChecklistItem(nextChecklistId++, "", "", "Nowy", true);
+        if (index >= 0) {
+            checklistItems.add(index + 1, newItem);
+        } else {
+            checklistItems.add(newItem);
+        }
+    }
+
+    public void addNewChecklistRow() {
+        checklistItems.add(new ChecklistItem(nextChecklistId++, "", "", "Nowy", true));
+    }
+
+    public void deleteChecklistRow(ChecklistItem row) {
+        checklistItems.remove(row);
+    }
+
+    public void modifyChecklistRow(ChecklistItem row) {
+        row.setEdited(!row.isEdited());
+    }
+
+    public void saveChecklist() {
+        for (ChecklistItem item : checklistItems) {
+            item.setEdited(false);
+        }
+        snapshotChecklist();
+    }
+
+    public void refreshChecklist() {
+        checklistItems = new ArrayList<>();
+        for (ChecklistItem item : savedChecklistSnapshot) {
+            checklistItems.add(new ChecklistItem(item));
+        }
     }
 
     public String getDataFromReferenceComponent() {
@@ -131,5 +184,13 @@ public class SessionController implements Serializable {
 
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
+    }
+
+    public List<ChecklistItem> getChecklistItems() {
+        return checklistItems;
+    }
+
+    public void setChecklistItems(List<ChecklistItem> checklistItems) {
+        this.checklistItems = checklistItems;
     }
 }

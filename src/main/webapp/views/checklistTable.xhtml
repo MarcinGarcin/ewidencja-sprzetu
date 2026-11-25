@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/masterTemplate.xhtml">
+    <ui:define name="title">#{msgs.checklistTitle}</ui:define>
+    <ui:define name="content">
+        <h2 class="page-title">#{msgs.checklistTitle}</h2>
+        <div class="card">
+            <h:form id="checklistForm">
+                <h:dataTable value="#{sessionController.checklistItems}" var="item"
+                             styleClass="data-table" rowClasses="oddRow,evenRow">
+                    <h:column>
+                        <f:facet name="header">#{msgs.colId}</f:facet>
+                        <h:outputText value="#{item.id}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msgs.colAssetName}</f:facet>
+                        <h:inputText value="#{item.assetName}" rendered="#{item.edited}" styleClass="input-text" />
+                        <h:outputText value="#{item.assetName}" rendered="#{not item.edited}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msgs.colTask}</f:facet>
+                        <h:inputText value="#{item.checkTask}" rendered="#{item.edited}" styleClass="input-text" />
+                        <h:outputText value="#{item.checkTask}" rendered="#{not item.edited}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msgs.colStatus}</f:facet>
+                        <h:inputText value="#{item.status}" rendered="#{item.edited}" styleClass="input-text" />
+                        <h:outputText value="#{item.status}" rendered="#{not item.edited}" />
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">#{msgs.colOperation}</f:facet>
+                        <h:selectBooleanCheckbox id="editCheckBox" value="#{item.edited}" onclick="submit()" />
+                        <h:commandButton id="addRow" value="#{msgs.btnInsert}" action="#{sessionController.addChecklistRow(item)}" styleClass="btn-secondary" />
+                        <h:commandButton id="delRow" value="#{msgs.btnDelete}" action="#{sessionController.deleteChecklistRow(item)}" styleClass="btn-danger" />
+                        <h:commandButton id="modRow" value="#{msgs.btnModify}" action="#{sessionController.modifyChecklistRow(item)}" styleClass="btn-primary" />
+                    </h:column>
+                </h:dataTable>
+                <div class="action-bar">
+                    <h:commandButton value="#{msgs.btnAddNew}" action="#{sessionController.addNewChecklistRow()}" styleClass="btn-primary" />
+                    <h:commandButton value="#{msgs.btnSave}" action="#{sessionController.saveChecklist()}" styleClass="btn-primary" />
+                    <h:commandButton value="#{msgs.btnRefresh}" action="#{sessionController.refreshChecklist()}" styleClass="btn-secondary" />
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
