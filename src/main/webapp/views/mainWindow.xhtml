@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/template/masterTemplate.xhtml">
+    <ui:define name="title">#{msgs.dashboardTitle}</ui:define>
+    <ui:define name="content">
+        <h2 class="page-title">#{msgs.dashboardTitle}</h2>
+        <p>#{msgs.welcome}</p>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3>#{msgs.xmlConfigTitle}</h3>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.authorLabel}: </span>
+                    <h:outputText value="#{appConfigXML.authorName}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.groupLabel}: </span>
+                    <h:outputText value="#{appConfigXML.groupName}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">System: </span>
+                    <h:outputText value="#{appConfigXML.systemName}" />
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>#{msgs.appScopeTitle}</h3>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.appVersion}: </span>
+                    <h:outputText value="#{applicationController.appVersion}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.sessionsCount}: </span>
+                    <h:outputText value="#{applicationController.totalSessionsCount}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.startedAtLabel}: </span>
+                    <h:outputText value="#{applicationController.startedAt}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.globalMsg}: </span>
+                    <h:outputText value="#{applicationController.globalMessage}" />
+                </div>
+                <h:form id="appMsgForm" styleClass="form-inline">
+                    <h:inputText value="#{applicationController.globalMessage}" styleClass="input-text" />
+                    <h:commandButton value="#{msgs.btnSaveNote}" styleClass="btn-secondary" />
+                </h:form>
+            </div>
+
+            <div class="card">
+                <h3>#{msgs.sessionScopeTitle}</h3>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.sessionNote}: </span>
+                    <h:outputText value="#{sessionController.sessionNote}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.fromRefBeanLabel}: </span>
+                    <h:outputText value="#{sessionController.dataFromReferenceComponent}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.combinedStatus}: </span>
+                    <h:outputText value="#{sessionController.combinedStatus}" />
+                </div>
+                <h:form id="sessionNoteForm" styleClass="form-inline">
+                    <h:inputText value="#{sessionController.sessionNote}" styleClass="input-text" />
+                    <h:commandButton value="#{msgs.btnSaveNote}" styleClass="btn-secondary" />
+                </h:form>
+            </div>
+
+            <div class="card">
+                <h3>#{msgs.viewScopeTitle}</h3>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.viewCounter}: </span>
+                    <h:outputText value="#{dashboardViewController.viewRefreshCounter}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.localNote}: </span>
+                    <h:outputText value="#{dashboardViewController.localNote}" />
+                </div>
+                <div class="info-row">
+                    <span class="info-label">#{msgs.viewSummaryLabel}: </span>
+                    <h:outputText value="#{dashboardViewController.viewSummary}" />
+                </div>
+                <h:form id="viewScopeForm" styleClass="form-inline">
+                    <h:inputText value="#{dashboardViewController.localNote}" styleClass="input-text" />
+                    <h:commandButton value="#{msgs.btnIncrementView}" action="#{dashboardViewController.incrementCounter()}" styleClass="btn-primary" />
+                </h:form>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>#{msgs.navDemoTitle}</h3>
+            <h:form id="navDemoForm">
+                <div class="info-row">
+                    <h:selectBooleanCheckbox id="advancedModeChk" value="#{sessionController.advancedMode}" />
+                    <h:outputLabel for="advancedModeChk" value=" #{msgs.advancedModeLabel}" />
+                </div>
+                <div class="form-inline">
+                    <h:commandButton value="#{msgs.btnStaticAlias}" action="infoAlias" styleClass="btn-primary" />
+                    <h:commandButton value="#{msgs.btnRedirect}" action="goChecklistRedirect" styleClass="btn-primary" />
+                    <h:commandButton value="#{msgs.btnConditional}" action="conditionalNav" styleClass="btn-secondary" />
+                </div>
+                <div class="form-inline">
+                    <h:selectOneMenu value="#{sessionController.dynamicTarget}" styleClass="input-text">
+                        <f:selectItem itemValue="info" itemLabel="#{msgs.dynamicTargetInfo}" />
+                        <f:selectItem itemValue="equipment" itemLabel="#{msgs.dynamicTargetEquipment}" />
+                    </h:selectOneMenu>
+                    <h:commandButton value="#{msgs.btnDynamic}" action="#{sessionController.navigateDynamic()}" styleClass="btn-secondary" />
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
