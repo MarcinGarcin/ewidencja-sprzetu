@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context path="/ITAssetManager">
+<Context path="/ITAssetManager" cookies="false">
     <Realm className="org.apache.catalina.realm.DataSourceRealm"
            dataSourceName="jdbc/authority"
            localDataSource="false"

@@ -18,6 +18,7 @@
     </servlet-mapping>
     <session-config>
         <session-timeout>30</session-timeout>
+        <tracking-mode>URL</tracking-mode>
     </session-config>
     <welcome-file-list>
         <welcome-file>faces/views/mainWindow.xhtml</welcome-file>
@@ -32,6 +33,19 @@
         <auth-constraint>
             <role-name>it_staff</role-name>
         </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>Enforce HTTPS Everywhere</display-name>
+        <web-resource-collection>
+            <web-resource-name>All Application Resources</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
     </security-constraint>
     <login-config>
         <auth-method>FORM</auth-method>
