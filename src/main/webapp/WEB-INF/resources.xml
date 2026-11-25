@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <Resource id="jdbc/itAssetDB" type="javax.sql.DataSource">
+        UserName=itasset
+        Password=itasset_pass
+        JdbcDriver=org.postgresql.Driver
+        JdbcUrl=jdbc:postgresql://localhost:5432/itassetdb
+        JtaManaged=true
+    </Resource>
+</resources>
